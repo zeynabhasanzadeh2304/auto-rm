@@ -1,12 +1,246 @@
-<html>
-    <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Avto RM</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="css/styles.css">
-</head>
-    <body>
+  <title>AUTO RM - Dealership Catalog</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
 
-    </body>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background-color: #f4f5f8; color: #333; }
+
+    header { background-color: #091983; color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; }
+    
+    .brand-logo { display: flex; flex-direction: column; text-decoration: none; }
+    .brand-svg { width: 140px; height: auto; margin-bottom: -5px; }
+    .brand-text { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; font-weight: 900; line-height: 1; letter-spacing: -0.5px; }
+    .brand-text .auto { color: #ffffff; }
+    .brand-text .rm { color: #a5b4fc; margin-left: 3px; }
+
+    .header-contact { font-size: 0.9rem; text-align: right; color: #e0e7ff; }
+
+    .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+
+    /* Search Input Bar */
+    .search-container { margin-bottom: 25px; }
+    #searchInput {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    #searchInput:focus {
+      border-color: #091983;
+      box-shadow: 0 0 0 3px rgba(9, 25, 131, 0.15);
+    }
+
+    /* Inventory Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+    .card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.2s; }
+    .card:hover { transform: translateY(-3px); }
+    .card img { width: 100%; height: 160px; object-fit: cover; }
+    .card-details { padding: 15px; }
+    .price { font-size: 1.3rem; font-weight: bold; color: #091983; margin-bottom: 5px; }
+    .title { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+    .meta { font-size: 0.85rem; color: #666; }
+
+    /* Modal Backdrop & Content */
+    .modal-backdrop {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 1000;
+    }
+    .modal-content {
+      background: white; border-radius: 10px; width: 90%; max-width: 600px;
+      overflow: hidden; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .close-btn {
+      position: absolute; top: 10px; right: 15px; font-size: 1.8rem;
+      color: white; background: rgba(0,0,0,0.5); border: none; border-radius: 50%;
+      width: 35px; height: 35px; cursor: pointer; z-index: 10; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .carousel-container { position: relative; width: 100%; height: 320px; background: #000; }
+    .carousel-container img { width: 100%; height: 100%; object-fit: cover; }
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.5); color: white; border: none;
+      font-size: 1.5rem; padding: 10px 15px; cursor: pointer; border-radius: 4px;
+    }
+    .prev-btn { left: 10px; }
+    .next-btn { right: 10px; }
+    .modal-body { padding: 20px; }
+    .modal-price { font-size: 1.6rem; font-weight: bold; color: #091983; }
+    .modal-title { font-size: 1.3rem; margin-bottom: 15px; }
+    .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; font-size: 0.95rem; }
+    .specs-item { border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    .specs-item span { color: #666; }
+    .whatsapp-btn {
+      display: block; text-align: center; background-color: #25D366; color: white;
+      text-decoration: none; padding: 12px; font-weight: bold; border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="brand-logo">
+      <svg class="brand-svg" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 10 80 Q 90 25 280 40" fill="none" stroke="#a5b4fc" stroke-width="7" stroke-linecap="round"/>
+        <path d="M 60 55 C 80 55, 100 25, 140 25 C 180 25, 210 55, 240 55" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      <div class="brand-text">
+        <span class="auto">AUTO</span><span class="rm">RM</span>
+      </div>
+    </a>
+
+    <div class="header-contact">
+      <div>📞 +994 (12) 000-00-00</div>
+      <div>📍 Baku, Mon-Sat 09:00-19:00</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Search Bar -->
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search by brand or model (e.g. Toyota, Kia, BMW)...">
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="grid" id="inventoryGrid"></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="carModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">&times;</button>
+      
+      <div class="carousel-container">
+        <button class="carousel-btn prev-btn" onclick="prevPhoto()">&#10094;</button>
+        <img id="carouselImage" src="" alt="Car Photo">
+        <button class="carousel-btn next-btn" onclick="nextPhoto()">&#10095;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-price" id="modalPrice"></div>
+        <div class="modal-title" id="modalTitle"></div>
+
+        <div class="specs-grid">
+          <div class="specs-item"><span>Year:</span> <strong id="specYear"></strong></div>
+          <div class="specs-item"><span>Engine:</span> <strong id="specEngine"></strong></div>
+          <div class="specs-item"><span>Mileage:</span> <strong id="specMileage"></strong></div>
+          <div class="specs-item"><span>City:</span> <strong id="specCity"></strong></div>
+        </div>
+
+        <a href="https://wa.me/994120000000" class="whatsapp-btn">Contact on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let carsData = [];
+    let currentCar = null;
+    let currentPhotoIndex = 0;
+
+    // Load JSON Data
+    fetch('cars.json')
+      .then(response => response.json())
+      .then(data => {
+        carsData = data;
+        renderCards(carsData);
+      })
+      .catch(error => console.error('Error loading JSON:', error));
+
+    // Render Cards Function
+    function renderCards(cars) {
+      const gridContainer = document.getElementById('inventoryGrid');
+      if (!gridContainer) return;
+
+      gridContainer.innerHTML = '';
+
+      if (cars.length === 0) {
+        gridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px 0;">No vehicles match your search.</p>';
+        return;
+      }
+
+      cars.forEach(car => {
+        const cardHTML = `
+          <div class="card" onclick="openModal(${car.id})">
+            <img src="${car.photos[0]}" alt="${car.title}">
+            <div class="card-details">
+              <div class="price">${car.price}</div>
+              <div class="title">${car.title}</div>
+              <div class="meta">${car.year} • ${car.engine} • ${car.mileage}</div>
+            </div>
+          </div>
+        `;
+        gridContainer.innerHTML += cardHTML;
+      });
+    }
+
+    // Direct Event Listener for Search Input
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase().trim();
+      const filteredCars = carsData.filter(car => 
+        car.title.toLowerCase().includes(searchTerm)
+      );
+      renderCards(filteredCars);
+    });
+
+    // Modal Logic
+    function openModal(id) {
+      currentCar = carsData.find(c => c.id === id);
+      if (!currentCar) return;
+
+      currentPhotoIndex = 0;
+      document.getElementById('modalPrice').innerText = currentCar.price;
+      document.getElementById('modalTitle').innerText = currentCar.title;
+      
+      document.getElementById('specYear').innerText = currentCar.year;
+      document.getElementById('specEngine').innerText = currentCar.engine;
+      document.getElementById('specMileage').innerText = currentCar.mileage;
+      document.getElementById('specCity').innerText = currentCar.city;
+
+      updateCarousel();
+      document.getElementById('carModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('carModal').style.display = 'none';
+    }
+
+    function updateCarousel() {
+      document.getElementById('carouselImage').src = currentCar.photos[currentPhotoIndex];
+    }
+
+    function nextPhoto() {
+      currentPhotoIndex = (currentPhotoIndex + 1) % currentCar.photos.length;
+      updateCarousel();
+    }
+
+    function prevPhoto() {
+      currentPhotoIndex = (currentPhotoIndex - 1 + currentCar.photos.length) % currentCar.photos.length;
+      updateCarousel();
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('carModal');
+      if (event.target === modal) closeModal();
+    };
+  </script>
+
+</body>
 </html>
