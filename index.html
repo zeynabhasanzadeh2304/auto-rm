@@ -117,6 +117,23 @@
     <div class="search-container">
       <input type="text" id="searchInput" placeholder="Search by brand or model (e.g. Toyota, Kia, BMW)...">
     </div>
+    <!-- Dropdown Menu -->
+<label for="installmentFilter">Payment Option:</label>
+<select id="installmentFilter">
+  <option value="all">Doesn't Matter</option>
+  <option value="true">In Installments</option>
+</select>
+
+<!-- Example Items (Update your existing item elements with data-installment) -->
+<div class="product-card" data-installment="true">
+  <h3>Item 1</h3>
+  <p>Installments available</p>
+</div>
+
+<div class="product-card" data-installment="false">
+  <h3>Item 2</h3>
+  <p>Pay in full only</p>
+</div>
 
     <!-- Cards Grid -->
     <div class="grid" id="inventoryGrid"></div>
@@ -149,6 +166,22 @@
     </div>
   </div>
 
+  <script>
+  document.getElementById('installmentFilter').addEventListener('change', function () {
+    const selectedValue = this.value; // 'all' or 'true'
+    const items = document.querySelectorAll('[data-installment]'); // Selects all elements with the attribute
+
+    items.forEach(item => {
+      const acceptsInstallments = item.getAttribute('data-installment');
+
+      if (selectedValue === 'all' || acceptsInstallments === selectedValue) {
+        item.style.display = ''; // Shows the element (restores default layout)
+      } else {
+        item.style.display = 'none'; // Hides the element
+      }
+    });
+  });
+</script>
   <script>
     let carsData = [];
     let currentCar = null;
