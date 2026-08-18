@@ -117,23 +117,13 @@
     <div class="search-container">
       <input type="text" id="searchInput" placeholder="Search by brand or model (e.g. Toyota, Kia, BMW)...">
     </div>
-    <!-- Dropdown Menu -->
-<label for="installmentFilter">Payment Option:</label>
-<select id="installmentFilter">
-  <option value="all">Doesn't Matter</option>
-  <option value="true">In Installments</option>
+    <!-- Paste this right below your search input -->
+<select id="installmentFilter" class="your-filter-class">
+    <option value="all">Payment Type: Doesn't Matter</option>
+    <option value="true">Payment Type: In Installments</option>
+    <option value="false">Payment Type: In Full</option>
 </select>
-
-<!-- Example Items (Update your existing item elements with data-installment) -->
-<div class="product-card" data-installment="true">
-  <h3>Item 1</h3>
-  <p>Installments available</p>
-</div>
-
-<div class="product-card" data-installment="false">
-  <h3>Item 2</h3>
-  <p>Pay in full only</p>
-</div>
+    <!-- Dropdown Menu -->
 
     <!-- Cards Grid -->
     <div class="grid" id="inventoryGrid"></div>
@@ -166,22 +156,6 @@
     </div>
   </div>
 
-  <script>
-  document.getElementById('installmentFilter').addEventListener('change', function () {
-    const selectedValue = this.value; // 'all' or 'true'
-    const items = document.querySelectorAll('[data-installment]'); // Selects all elements with the attribute
-
-    items.forEach(item => {
-      const acceptsInstallments = item.getAttribute('data-installment');
-
-      if (selectedValue === 'all' || acceptsInstallments === selectedValue) {
-        item.style.display = ''; // Shows the element (restores default layout)
-      } else {
-        item.style.display = 'none'; // Hides the element
-      }
-    });
-  });
-</script>
   <script>
     let carsData = [];
     let currentCar = null;
@@ -274,6 +248,49 @@
       if (event.target === modal) closeModal();
     };
   </script>
+  <script>
+    // --- INTEGRATION: Set your existing IDs here ---
+    const searchBarId = 'yourSearchID';          // <-- Change to your search input's ID
+    const listingsContainerId = 'yourListingsID'; // <-- Change to the container ID holding your items
+    
+    // Set the ID for the new filter (matches the HTML in Step 1)
+    const filterSelectId = 'installmentFilter';
+
+    // 1. Get references
+    const searchBar = document.getElementById(searchBarId);
+    const paymentFilter = document.getElementById(filterSelectId);
+    const listingsContainer = document.getElementById(listingsContainerId);
+    
+    // Get all listing cards initially (assumes you have a consistent class name, like 'listing-card')
+    const allListingCards = listingsContainer.querySelectorAll('.listing-card');
+
+    // 2. Define the unified filtering function (Search + Installments)
+    function applyFilters() {
+        const selectedPayment = paymentFilter.value;
+        const searchQuery = searchBar.value.toLowerCase().trim();
+
+        allListingCards.forEach(card => {
+            // Check data attribute (data-installment="true/false")
+            const cardInstallment = card.getAttribute('data-installment');
+            // Check text content (assuming your existing search logic)
+            const cardText = card.textContent.toLowerCase();
+
+            // Combined logic: must match payment selection AND search query
+            const paymentMatch = (selectedPayment === 'all' || selectedPayment === cardInstallment);
+            const searchMatch = (searchQuery === '' || cardText.includes(searchQuery));
+
+            if (paymentMatch && searchMatch) {
+                card.style.display = ''; // Show
+            } else {
+                card.style.display = 'none'; // Hide
+            }
+        });
+    }
+
+    // 3. Attach listeners
+    searchBar.addEventListener('input', applyFilters);
+    paymentFilter.addEventListener('change', applyFilters);
+</script>
 
 </body>
 </html>
