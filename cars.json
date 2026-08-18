@@ -8,6 +8,7 @@
     "engine": "2.5 L",
     "mileage": "105 000 km",
     "city": "Baku",
+    "inst": "Credit",
     "photos": [
       "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800",
       "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800"
@@ -21,6 +22,7 @@
     "engine": "2.4 L",
     "mileage": "68 000 km",
     "city": "Baku",
+    "inst": "Credit",
     "photos": [
       "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800",
       "https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=800"
@@ -34,6 +36,7 @@
   "engine": "2.0 L",
   "mileage": "85 000 km",
   "city": "Baku",
+  "inst": "Credit",
   "photos": [
     "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800",
     "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800"
