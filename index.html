@@ -112,31 +112,38 @@
     </div>
   </header>
 
-  <div class="container">
-    <!-- Search Bar -->
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="Search by brand or model (e.g. Toyota, Kia, BMW)...">
-    </div>
-    <!-- Paste this right below your search input -->
-<!-- === SEARCH AND FILTER BLOCK (Inline styles for positioning) === -->
-<div style="display: flex; flex-direction: column; gap: 12px; max-width: 500px; margin: 0 auto 20px auto;">
-    
-    <!-- 1. Your Existing Search Input (Ensure the ID matches the script above) -->
-    <input type="text" id="yourSearchBarID" placeholder="Search for models..." 
-           style="padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px;">
+<div class="container">
+    <!-- === UNIFIED SEARCH & FILTER CONTROLS === -->
+    <!-- (Styled with inline CSS for stacking and layout) -->
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto 25px auto;">
+        
+        <!-- 1. The Search Bar (Must use ID: searchInput) -->
+        <input type="text" id="searchInput" placeholder="Marka və ya model üzrə axtarış (Toyota, Kia, BMW)..." 
+               style="width: 100%; padding: 14px 18px; font-size: 1rem; font-family: 'Inter', sans-serif; border: 2px solid #e2e8f0; border-radius: 8px;">
 
-    <!-- 2. The New Functional Dropdown (Styled with your own inline CSS) -->
-    <select id="installmentFilter" 
-            style="width: 100%; padding: 12px; font-size: 16px; 
-                   border: 2px solid #ddd; border-radius: 6px; 
-                   background-color: white; color: #333; cursor: pointer;">
-        <!-- Important: value names here match the filtering logic -->
-        <option value="all">Ödəniş növü fərq etməz (All)</option>
-        <option value="kredit_only">Kreditlə (Installments)</option>
-        <option value="nagd_only">Nağd (Full Payment)</option>
-    </select>
-    
-</div>
+        <!-- 2. The Filter Dropdown (Must use ID: installmentFilter) -->
+        <!-- (Styled by you, for you) -->
+        <select id="installmentFilter" 
+                style="width: 100%; padding: 12px; font-size: 16px; 
+                       font-family: 'Inter', sans-serif;
+                       border: 2px solid #ddd; border-radius: 8px; 
+                       background-color: white; color: #333; cursor: pointer;">
+            <!-- These value names (kredit_only/nagd_only) MUST match the logic in Step 1 -->
+            <option value="all">Ödəniş növü fərq etməz (All)</option>
+            <option value="kredit_only">Kreditlə (Installments)</option>
+            <option value="nagd_only">Nağd (Full Payment)</option>
+        </select>
+        
+    </div>
+    <!-- ======================================== -->
+
+    <!-- Cards Grid -->
+    <div class="grid" id="inventoryGrid"></div>
+  </div>
+
+    <!-- Cards Grid -->
+    <div class="grid" id="inventoryGrid"></div>
+  </div>
     <!-- Dropdown Menu -->
 
     <!-- Cards Grid -->
@@ -263,115 +270,137 @@
       if (event.target === modal) closeModal();
     };
   </script>
+
   <script>
-    // --- INTEGRATION: Set your existing IDs here ---
-    const searchBarId = 'yourSearchID';          // <-- Change to your search input's ID
-    const listingsContainerId = 'yourListingsID'; // <-- Change to the container ID holding your items
-    
-    // Set the ID for the new filter (matches the HTML in Step 1)
-    const filterSelectId = 'installmentFilter';
+    // Master variables
+    let carsData = []; // Full list from JSON
+    let currentCar = null;
+    let currentPhotoIndex = 0;
 
-    // 1. Get references
-    const searchBar = document.getElementById(searchBarId);
-    const paymentFilter = document.getElementById(filterSelectId);
-    const listingsContainer = document.getElementById(listingsContainerId);
-    
-    // Get all listing cards initially (assumes you have a consistent class name, like 'listing-card')
-    const allListingCards = listingsContainer.querySelectorAll('.listing-card');
+    // 1. Get DOM references (IDs must match your HTML)
+    const gridContainer = document.getElementById('inventoryGrid');
+    const searchInput = document.getElementById('searchInput');
+    const installmentFilter = document.getElementById('installmentFilter');
 
-    // 2. Define the unified filtering function (Search + Installments)
-    function applyFilters() {
-        const selectedPayment = paymentFilter.value;
-        const searchQuery = searchBar.value.toLowerCase().trim();
+    // 2. Initial Fetch (Your original dynamic loading logic)
+    fetch('cars.json')
+        .then(response => response.json())
+        .then(data => {
+            carsData = data; // Store the master list in memory
+            performUnifiedFiltering(); // Render all cars by default
+        })
+        .catch(error => console.error('Error loading JSON:', error));
 
-        allListingCards.forEach(card => {
-            // Check data attribute (data-installment="true/false")
-            const cardInstallment = card.getAttribute('data-installment');
-            // Check text content (assuming your existing search logic)
-            const cardText = card.textContent.toLowerCase();
-
-            // Combined logic: must match payment selection AND search query
-            const paymentMatch = (selectedPayment === 'all' || selectedPayment === cardInstallment);
-            const searchMatch = (searchQuery === '' || cardText.includes(searchQuery));
-
-            if (paymentMatch && searchMatch) {
-                card.style.display = ''; // Show
-            } else {
-                card.style.display = 'none'; // Hide
-            }
-        });
-    }
-
-    // 3. Attach listeners
-    searchBar.addEventListener('input', applyFilters);
-    paymentFilter.addEventListener('change', applyFilters);
-</script>
-  <script>
-    // ========================================================
-    // INTEGRATION STEP: Set your actual IDs and Class names
-    // ========================================================
-    
-    // 1. The ID of the container holding all your car cards
-    const Listings_Container_ID = 'inventoryGrid';
-
-    // 2. The ID of your existing Search Input
-    const Search_Bar_ID = 'searchInput';
-
-    // 3. The CSS class you use for each individual car card (e.g., '.car-item', '.product-card')
-    const Card_Class_Selector = 'grid'; 
-
-    // (This matches the new dropdown ID we used before)
-    const Filter_Select_ID = 'installmentFilter';
-
-    // ========================================================
-    // FUNCTIONAL CODE (Do not edit below this line)
-    // ========================================================
-
-    const container = document.getElementById(Listings_Container_ID);
-    const searchBar = document.getElementById(Search_Bar_ID);
-    const filterSelect = document.getElementById(Filter_Select_ID);
-    
-    // Get the initial collection of car cards
-    const allCarCards = container.querySelectorAll(Card_Class_Selector);
-
+    // 3. THE CRUCIAL UNIFIED FILTERING FUNCTION (Search + Dropdown)
     function performUnifiedFiltering() {
-        const filterValue = filterSelect.value;
-        const searchQuery = searchBar.value.toLowerCase().trim();
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedPaymentValue = installmentFilter.value;
 
-        // Loop through all cards and apply the combined filter rules
-        allCarCards.forEach(card => {
-            // Get the entire text content of this specific card and lowercase it
-            const cardTextContent = card.textContent.toLowerCase();
-
-            // Condition 1: Check Payment Filter (must contain the Azeri word)
+        // Filter the MASTER LIST from memory
+        const filteredCars = carsData.filter(car => {
+            
+            // --- CONDITION 1: Payment Dropdown ---
+            // We assemble all text *that would be on the card* to check for the words.
+            const allCardText = `${car.price} ${car.title} ${car.year} ${car.engine} ${car.mileage} ${car.city}`.toLowerCase();
+            
             let matchesPaymentFilter = false;
-            if (filterValue === 'all') {
+            if (selectedPaymentValue === 'all') {
+                matchesPaymentFilter = true; // "Doesn't Matter" is chosen
+            } else if (selectedPaymentValue === 'kredit_only' && allCardText.includes('kredit')) {
+                // If "Kredit" chosen and 'kredit' is in the text, it's a match.
                 matchesPaymentFilter = true;
-            } else if (filterValue === 'kredit_only' && cardTextContent.includes('kredit')) {
-                // Shows card only if it contains 'kredit' (for installments)
-                matchesPaymentFilter = true;
-            } else if (filterValue === 'nagd_only' && cardTextContent.includes('nagd')) {
-                // Shows card only if it contains 'nagd' (for in full)
+            } else if (selectedPaymentValue === 'nagd_only' && allCardText.includes('nagd')) {
+                // If "Nagd" chosen and 'nagd' is in the text, it's a match.
                 matchesPaymentFilter = true;
             }
 
-            // Condition 2: Check Search Query
-            const matchesSearchQuery = (searchQuery === '' || cardTextContent.includes(searchQuery));
+            // --- CONDITION 2: Search Input ---
+            // Only search by title, as per your original search logic.
+            const matchesSearchQuery = (searchTerm === '' || car.title.toLowerCase().includes(searchTerm));
 
-            // Combined Logic: Card must satisfy BOTH filters to remain visible
-            if (matchesPaymentFilter && matchesSearchQuery) {
-                card.style.display = ''; // Show (resets default layout display)
-            } else {
-                card.style.display = 'none'; // Hide
-            }
+            // --- COMBINED RESULT: A card must pass BOTH filters ---
+            return matchesPaymentFilter && matchesSearchQuery;
+        });
+
+        // Use your existing function to render the finalized, dual-filtered list.
+        renderCards(filteredCars);
+    }
+
+    // 4. Render Cards Function (Your original logic, unchanged)
+    function renderCards(cars) {
+        if (!gridContainer) return;
+        gridContainer.innerHTML = '';
+
+        if (cars.length === 0) {
+            gridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px 0;">Heç bir nəqliyyat vasitəsi tapılmadı.</p>';
+            return;
+        }
+
+        cars.forEach(car => {
+            // Note: car structure (id, photos[0], title, etc.) must match your JSON.
+            const cardHTML = `
+                <div class="card" onclick="openModal(${car.id})">
+                    <img src="${car.photos[0]}" alt="${car.title}">
+                    <div class="card-details">
+                        <div class="price">${car.price}</div>
+                        <div class="title">${car.title}</div>
+                        <div class="meta">${car.year} • ${car.engine} • ${car.mileage} • ${car.city}</div>
+                    </div>
+                </div>
+            `;
+            gridContainer.innerHTML += cardHTML;
         });
     }
 
-    // Attach event listeners to trigger filtering on change/input
-    searchBar.addEventListener('input', performUnifiedFiltering);
-    filterSelect.addEventListener('change', performUnifiedFiltering);
+    // 5. Dual Event Listeners: BOTH inputs trigger the SAME function.
+    searchInput.addEventListener('input', performUnifiedFiltering);
+    installmentFilter.addEventListener('change', performUnifiedFiltering);
 
+
+    // --- Your Original Modal Logic (UNCHANGED) ---
+    function openModal(id) {
+        currentCar = carsData.find(c => c.id === id);
+        if (!currentCar) return;
+
+        currentPhotoIndex = 0;
+        document.getElementById('modalPrice').innerText = currentCar.price;
+        document.getElementById('modalTitle').innerText = currentCar.title;
+        
+        document.getElementById('specYear').innerText = currentCar.year;
+        document.getElementById('specEngine').innerText = currentCar.engine;
+        document.getElementById('specMileage').innerText = currentCar.mileage;
+        document.getElementById('specCity').innerText = currentCar.city;
+
+        updateCarousel();
+        document.getElementById('carModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('carModal').style.display = 'none';
+    }
+
+    function updateCarousel() {
+        document.getElementById('carouselImage').src = currentCar.photos[currentPhotoIndex];
+    }
+
+    function nextPhoto() {
+        currentPhotoIndex = (currentPhotoIndex + 1) % currentCar.photos.length;
+        updateCarousel();
+    }
+
+    function prevPhoto() {
+        currentPhotoIndex = (currentPhotoIndex - 1 + currentCar.photos.length) % currentCar.photos.length;
+        updateCarousel();
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('carModal');
+        if (event.target === modal) closeModal();
+    };
 </script>
+ 
+ 
+
 
 </body>
 </html>
