@@ -118,11 +118,25 @@
       <input type="text" id="searchInput" placeholder="Search by brand or model (e.g. Toyota, Kia, BMW)...">
     </div>
     <!-- Paste this right below your search input -->
-<select id="installmentFilter" class="your-filter-class">
-    <option value="all">Payment Type: Doesn't Matter</option>
-    <option value="true">Payment Type: In Installments</option>
-    <option value="false">Payment Type: In Full</option>
-</select>
+<!-- === SEARCH AND FILTER BLOCK (Inline styles for positioning) === -->
+<div style="display: flex; flex-direction: column; gap: 12px; max-width: 500px; margin: 0 auto 20px auto;">
+    
+    <!-- 1. Your Existing Search Input (Ensure the ID matches the script above) -->
+    <input type="text" id="yourSearchBarID" placeholder="Search for models..." 
+           style="padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px;">
+
+    <!-- 2. The New Functional Dropdown (Styled with your own inline CSS) -->
+    <select id="installmentFilter" 
+            style="width: 100%; padding: 12px; font-size: 16px; 
+                   border: 2px solid #ddd; border-radius: 6px; 
+                   background-color: white; color: #333; cursor: pointer;">
+        <!-- Important: value names here match the filtering logic -->
+        <option value="all">Ödəniş növü fərq etməz (All)</option>
+        <option value="kredit_only">Kreditlə (Installments)</option>
+        <option value="nagd_only">Nağd (Full Payment)</option>
+    </select>
+    
+</div>
     <!-- Dropdown Menu -->
 
     <!-- Cards Grid -->
@@ -291,6 +305,72 @@
     // 3. Attach listeners
     searchBar.addEventListener('input', applyFilters);
     paymentFilter.addEventListener('change', applyFilters);
+</script>
+  <script>
+    // ========================================================
+    // INTEGRATION STEP: Set your actual IDs and Class names
+    // ========================================================
+    
+    // 1. The ID of the container holding all your car cards
+    const Listings_Container_ID = 'inventoryGrid';
+
+    // 2. The ID of your existing Search Input
+    const Search_Bar_ID = 'searchInput';
+
+    // 3. The CSS class you use for each individual car card (e.g., '.car-item', '.product-card')
+    const Card_Class_Selector = 'grid'; 
+
+    // (This matches the new dropdown ID we used before)
+    const Filter_Select_ID = 'installmentFilter';
+
+    // ========================================================
+    // FUNCTIONAL CODE (Do not edit below this line)
+    // ========================================================
+
+    const container = document.getElementById(Listings_Container_ID);
+    const searchBar = document.getElementById(Search_Bar_ID);
+    const filterSelect = document.getElementById(Filter_Select_ID);
+    
+    // Get the initial collection of car cards
+    const allCarCards = container.querySelectorAll(Card_Class_Selector);
+
+    function performUnifiedFiltering() {
+        const filterValue = filterSelect.value;
+        const searchQuery = searchBar.value.toLowerCase().trim();
+
+        // Loop through all cards and apply the combined filter rules
+        allCarCards.forEach(card => {
+            // Get the entire text content of this specific card and lowercase it
+            const cardTextContent = card.textContent.toLowerCase();
+
+            // Condition 1: Check Payment Filter (must contain the Azeri word)
+            let matchesPaymentFilter = false;
+            if (filterValue === 'all') {
+                matchesPaymentFilter = true;
+            } else if (filterValue === 'kredit_only' && cardTextContent.includes('kredit')) {
+                // Shows card only if it contains 'kredit' (for installments)
+                matchesPaymentFilter = true;
+            } else if (filterValue === 'nagd_only' && cardTextContent.includes('nagd')) {
+                // Shows card only if it contains 'nagd' (for in full)
+                matchesPaymentFilter = true;
+            }
+
+            // Condition 2: Check Search Query
+            const matchesSearchQuery = (searchQuery === '' || cardTextContent.includes(searchQuery));
+
+            // Combined Logic: Card must satisfy BOTH filters to remain visible
+            if (matchesPaymentFilter && matchesSearchQuery) {
+                card.style.display = ''; // Show (resets default layout display)
+            } else {
+                card.style.display = 'none'; // Hide
+            }
+        });
+    }
+
+    // Attach event listeners to trigger filtering on change/input
+    searchBar.addEventListener('input', performUnifiedFiltering);
+    filterSelect.addEventListener('change', performUnifiedFiltering);
+
 </script>
 
 </body>
