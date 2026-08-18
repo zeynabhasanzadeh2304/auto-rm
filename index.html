@@ -112,10 +112,33 @@
     </div>
   </header>
 <div class="container">
-    <!-- Restore this section to be only your search bar -->
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="Search by brand or model (e.g. Toyota, Kia, BMW)...">
+    <!-- === UNIFIED SEARCH & FILTER CONTROLS === -->
+    <!-- (Styled with simple inline CSS for layout) -->
+    <div class="controls-wrapper" style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto 25px auto;">
+        
+        <!-- 1. The Search Bar (Must use ID: searchInput) -->
+        <input type="text" id="searchInput" placeholder="Marka və ya model üzrə axtarış (Toyota, Kia, BMW)..." 
+               style="width: 100%; padding: 14px 18px; font-size: 1rem; font-family: 'Inter', sans-serif; border: 2px solid #e2e8f0; border-radius: 8px;">
+
+        <!-- 2. The Filter Dropdown (Must use ID: installmentFilter) -->
+        <!-- ***You requested to style this yourself. I have added basic parameters you can modify*** -->
+        <select id="installmentFilter" 
+                style="width: 100%; padding: 12px; font-size: 16px; 
+                       font-family: 'Inter', sans-serif;
+                       border: 2px solid #ddd; border-radius: 8px; 
+                       background-color: white; color: #333; cursor: pointer;">
+            <!-- These value names (kredit_only/nagd_only) MUST match the logic in the script below -->
+            <option value="all">Ödəniş növü fərq etməz (All)</option>
+            <option value="kredit_only">Kreditlə (Installments)</option>
+            <option value="nagd_only">Nağd (Full Payment)</option>
+        </select>
+        
     </div>
+    <!-- ======================================== -->
+
+    <!-- Cards Grid (Dynamically filled) -->
+    <div class="grid" id="inventoryGrid"></div>
+  </div>
 <!-- ============================================== -->
 <!-- ============================================== -->
     <!-- ======================================== -->
@@ -161,96 +184,138 @@
     </div>
   </div>
 <script>
-    let carsData = [];
+    // Unified master variables
+    let carsData = []; // Full list of cars from JSON, stored in raw dynamic memory
     let currentCar = null;
     let currentPhotoIndex = 0;
 
-    // Load JSON Data (Your original dynamic loading)
+    // 1. References to DOM elements
+    const gridContainer = document.getElementById('inventoryGrid');
+    const searchInput = document.getElementById('searchInput');
+    const installmentFilter = document.getElementById('installmentFilter');
+
+    // 2. Initial Data Fetch (Unified to trigger filtering by default)
+    // We modify this slightly to store the master array and trigger the unified filter.
     fetch('cars.json')
-      .then(response => response.json())
-      .then(data => {
-        carsData = data;
-        renderCards(carsData);
-      })
-      .catch(error => console.error('Error loading JSON:', error));
+        .then(response => response.json())
+        .then(data => {
+            carsData = data; // Store the master array in dynamic memory
+            performUnifiedFiltering(); // Show all cars by default on start
+        })
+        .catch(error => {
+            console.error('⛔ Error loading JSON:', error);
+            gridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: red;">Failed to load car data. Ensure cars.json exists in the same folder.</p>';
+        });
 
-    // Render Cards Function (Your original)
-    function renderCards(cars) {
-      const gridContainer = document.getElementById('inventoryGrid');
-      if (!gridContainer) return;
-      gridContainer.innerHTML = '';
 
-      if (cars.length === 0) {
-        gridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px 0;">No vehicles match your search.</p>';
-        return;
-      }
+    // 3. THE NEW UNIFIED FILTERING FUNCTION ( Search Input + Dropdown )
+    // This is the core logic. It does NOT select visual cards.
+    // It filters the dynamic *array of JSON data* stored in memory.
+    function performUnifiedFiltering() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedPaymentValue = installmentFilter.value;
 
-      cars.forEach(car => {
-        const cardHTML = `
-          <div class="card" onclick="openModal(${car.id})">
-            <img src="${car.photos[0]}" alt="${car.title}">
-            <div class="card-details">
-              <div class="price">${car.price}</div>
-              <div class="title">${car.title}</div>
-              <div class="meta">${car.year} • ${car.engine} • ${car.mileage}</div>
-            </div>
-          </div>
-        `;
-        gridContainer.innerHTML += cardHTML;
-      });
+        // --- We create a completely new, filtered list from dynamic memory ---
+        const filteredCars = carsData.filter(car => {
+            
+            // Assembly for checking the raw Azeri word from the JSON structure
+            // We combine multiple raw text fields from the JSON object to check for "Kredit" or "Nagd".
+            const allRawCardTextToCheckForPayment = `${car.price} ${car.title} ${car.year} ${car.engine} ${car.mileage} ${car.city}`.toLowerCase();
+            
+            // --- CONDITION 1: Payment Dropdown (Checks Azeri word in raw JSON data) ---
+            let matchesPaymentFilter = false;
+            
+            if (selectedPaymentValue === 'all') {
+                matchesPaymentFilter = true; // "Doesn't Matter" is chosen
+            } else if (selectedPaymentValue === 'kredit_only' && allRawCardTextToCheckForPayment.includes('kredit')) {
+                matchesPaymentFilter = true; // "Kredit" chosen and exists in raw JSON data
+            } else if (selectedPaymentValue === 'nagd_only' && allRawCardTextToCheckForPayment.includes('nagd')) {
+                matchesPaymentFilter = true; // "Nagd" chosen and exists in raw JSON data
+            }
+
+            // --- CONDITION 2: Search Input (Only searches by title, as per original logic) ---
+            const matchesSearchQuery = (searchTerm === '' || car.title.toLowerCase().includes(searchTerm));
+
+            // Combined logic: A car must satisfy BOTH filter rules from the dynamic data array to be shown.
+            return matchesPaymentFilter && matchesSearchQuery;
+        });
+
+        // Use your existing function to render the randomized, final, dual-filtered list.
+        renderCards(filteredCars);
     }
 
-    // Direct Event Listener for Search Input (Your original search)
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-          const searchTerm = this.value.toLowerCase().trim();
-          const filteredCars = carsData.filter(car => 
-            car.title.toLowerCase().includes(searchTerm)
-          );
-          renderCards(filteredCars);
+
+    // 4. Render Cards Function (Your original dynamic logic, simplified)
+    // It takes the FINAL, filtered array as input and renders it.
+    function renderCards(cars) {
+        if (!gridContainer) return;
+        gridContainer.innerHTML = '';
+
+        if (cars.length === 0) {
+            gridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px 0;">Heç bir nəqliyyat vasitəsi tapılmadı.</p>';
+            return;
+        }
+
+        cars.forEach(car => {
+            // Note: car structure (id, photos[0], title, etc.) MUST match your JSON structure.
+            const cardHTML = `
+                <div class="card" onclick="openModal(${car.id})">
+                    <img src="${car.photos[0]}" alt="${car.title}">
+                    <div class="card-details">
+                        <div class="price">${car.price}</div>
+                        <div class="title">${car.title}</div>
+                        <div class="meta">${car.year} • ${car.engine} • ${car.mileage} • ${car.city}</div>
+                    </div>
+                </div>
+            `;
+            gridContainer.innerHTML += cardHTML;
         });
     }
 
-    // Modal Logic (Your original logic)
+    // 5. Connect Both Event Listeners: BOTH inputs trigger the SAME unified filtering function.
+    searchInput.addEventListener('input', performUnifiedFiltering);
+    installmentFilter.addEventListener('change', performUnifiedFiltering);
+
+
+    // --- Your Original Modal Logic (UNCHANGED) ---
     function openModal(id) {
-      currentCar = carsData.find(c => c.id === id);
-      if (!currentCar) return;
+        currentCar = carsData.find(c => c.id === id);
+        if (!currentCar) return;
 
-      currentPhotoIndex = 0;
-      document.getElementById('modalPrice').innerText = currentCar.price;
-      document.getElementById('modalTitle').innerText = currentCar.title;
-      
-      document.getElementById('specYear').innerText = currentCar.year;
-      document.getElementById('specEngine').innerText = currentCar.engine;
-      document.getElementById('specMileage').innerText = currentCar.mileage;
-      document.getElementById('specCity').innerText = currentCar.city;
+        currentPhotoIndex = 0;
+        document.getElementById('modalPrice').innerText = currentCar.price;
+        document.getElementById('modalTitle').innerText = currentCar.title;
+        
+        document.getElementById('specYear').innerText = currentCar.year;
+        document.getElementById('specEngine').innerText = currentCar.engine;
+        document.getElementById('specMileage').innerText = currentCar.mileage;
+        document.getElementById('specCity').innerText = currentCar.city;
 
-      updateCarousel();
-      document.getElementById('carModal').style.display = 'flex';
+        updateCarousel();
+        document.getElementById('carModal').style.display = 'flex';
     }
 
     function closeModal() {
-      document.getElementById('carModal').style.display = 'none';
+        document.getElementById('carModal').style.display = 'none';
     }
 
     function updateCarousel() {
-      document.getElementById('carouselImage').src = currentCar.photos[currentPhotoIndex];
+        document.getElementById('carouselImage').src = currentCar.photos[currentPhotoIndex];
     }
 
     function nextPhoto() {
-      currentPhotoIndex = (currentPhotoIndex + 1) % currentCar.photos.length;
-      updateCarousel();
+        currentPhotoIndex = (currentPhotoIndex + 1) % currentCar.photos.length;
+        updateCarousel();
     }
 
     function prevPhoto() {
-      currentPhotoIndex = (currentPhotoIndex - 1 + currentCar.photos.length) % currentCar.photos.length;
-      updateCarousel();
+        currentPhotoIndex = (currentPhotoIndex - 1 + currentCar.photos.length) % currentCar.photos.length;
+        updateCarousel();
     }
 
     window.onclick = function(event) {
-      const modal = document.getElementById('carModal');
-      if (event.target === modal) closeModal();
+        const modal = document.getElementById('carModal');
+        if (event.target === modal) closeModal();
     };
 </script>
   
