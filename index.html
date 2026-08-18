@@ -172,29 +172,30 @@
     </div>
   </div>
 <script>
-    // Unified master variables
-    let carsData = []; // This holds the full list of cars from JSON
+    // Master variables (Unified)
+    let carsData = []; // Full list from JSON
     let currentCar = null;
     let currentPhotoIndex = 0;
 
-    // 1. References to DOM elements
+    // 1. DOM References (IDs must match your HTML)
     const gridContainer = document.getElementById('inventoryGrid');
     const searchInput = document.getElementById('searchInput');
     const installmentFilter = document.getElementById('installmentFilter');
 
-    // 2. Load JSON Data (Your original dynamic loading logic)
-    // Unified to trigger filtering immediately upon loading.
+    // 2. Initial Fetch (Your original dynamic loading logic)
+    // It triggers performUnifiedFiltering() initially to show all cars.
     fetch('cars.json')
         .then(response => response.json())
         .then(data => {
-            carsData = data; // Store the master list in dynamic memory
-            performUnifiedFiltering(); // Render all cars by default on start
+            carsData = data; // Store the master list in memory
+            performUnifiedFiltering(); // Show all cars by default
         })
-        .catch(error => console.error('⛔ Error loading JSON:', error));
+        .catch(error => {
+            console.error('⛔ Error loading JSON:', error);
+            gridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: red;">JSON məlumatlarını yükləmək mümkün olmadı.</p>';
+        });
 
-
-    // 3. THE NEW UNIFIED FILTERING FUNCTION (Search Input + Dropdown)
-    // This makes them work *together* based on the JSON content.
+    // 3. THE NEW UNIFIED FILTERING FUNCTION (Search + Dropdown)
     function performUnifiedFiltering() {
         const searchTerm = searchInput.value.toLowerCase().trim();
         const selectedPaymentValue = installmentFilter.value;
@@ -202,37 +203,32 @@
         // Filter the MASTER LIST stored in memory
         const filteredCars = carsData.filter(car => {
             
-            // --- CONDITION 1: Payment Dropdown (Checks Azeri word in hypothetical card text) ---
-            // We assemble all text *that would appear on the card* to check for the words.
-            const allCardText = `${car.price} ${car.title} ${car.year} ${car.engine} ${car.mileage} ${car.city}`.toLowerCase();
+            // --- CONDITION 1: Dropdown/Payment Type ---
+            // We assemble all text that would appear on the card to check for "Kredit" or "Nagd".
+            const allCardTextToCheckForPayment = `${car.price} ${car.title} ${car.year} ${car.engine} ${car.mileage} ${car.city}`.toLowerCase();
             
             let matchesPaymentFilter = false;
-            
             if (selectedPaymentValue === 'all') {
                 matchesPaymentFilter = true; // "Doesn't Matter" is chosen
-            } else if (selectedPaymentValue === 'kredit_only' && allCardText.includes('kredit')) {
-                // If "Kredit" chosen and 'kredit' exists in text, it's a match.
+            } else if (selectedPaymentValue === 'kredit_only' && allCardTextToCheckForPayment.includes('kredit')) {
                 matchesPaymentFilter = true;
-            } else if (selectedPaymentValue === 'nagd_only' && allCardText.includes('nagd')) {
-                // If "Nagd" chosen and 'nagd' exists in text, it's a match.
+            } else if (selectedPaymentValue === 'nagd_only' && allCardTextToCheckForPayment.includes('nagd')) {
                 matchesPaymentFilter = true;
             }
 
             // --- CONDITION 2: Search Input ---
-            // We'll search only by title, as per your original search logic.
+            // Only search by title, as per your original search logic.
             const matchesSearchQuery = (searchTerm === '' || car.title.toLowerCase().includes(searchTerm));
 
-            // --- COMBINED RESULT: A car must satisfy BOTH filters to pass ---
+            // Combined logic: A car must satisfy BOTH filters to be shown.
             return matchesPaymentFilter && matchesSearchQuery;
         });
 
-        // Pass the finalized, dual-filtered list to your rendering function.
+        // Use your existing function to render the finalized, dual-filtered list.
         renderCards(filteredCars);
     }
 
-
-    // 4. Render Cards Function (Simplified modification of your original)
-    // We remove some complex check logic as the text must exist in dynamic data.
+    // 4. Render Cards Function (Your original dynamic logic, simplified)
     function renderCards(cars) {
         if (!gridContainer) return;
         gridContainer.innerHTML = '';
@@ -243,7 +239,7 @@
         }
 
         cars.forEach(car => {
-            // Note: car structure (id, photos[0], title, etc.) must match your JSON.
+            // Note: car structure (id, photos[0], title, etc.) must match your JSON structure.
             const cardHTML = `
                 <div class="card" onclick="openModal(${car.id})">
                     <img src="${car.photos[0]}" alt="${car.title}">
@@ -258,8 +254,7 @@
         });
     }
 
-    // 5. Direct Event Listeners (Unified Function)
-    // When EITHER input changes, they both trigger the SAME function to stay in sync.
+    // 5. Dual Event Listeners: BOTH inputs trigger the SAME unified function.
     searchInput.addEventListener('input', performUnifiedFiltering);
     installmentFilter.addEventListener('change', performUnifiedFiltering);
 
@@ -305,6 +300,13 @@
         if (event.target === modal) closeModal();
     };
 </script>
+  
+
+ 
+
+
+            `;
+
  
         
 
