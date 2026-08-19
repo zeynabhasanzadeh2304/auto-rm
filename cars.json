@@ -2,28 +2,32 @@
 [
   {
     "id": 1,
-    "title": "Toyota HiAce",
-    "price": "14 500 ₼",
-    "year": "2009",
-    "engine": "2.5 L",
-    "mileage": "105 000 km",
-    "city": "Kredit",
+    "title": "",
+    "price": "12000 ₼",
+    "year": "2006",
+    "engine": "3",
+    "mileage": "Benzin",
+    "city": "-",
     "photos": [
-      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800",
-      "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800"
+      "WhatsApp Image 2026-08-19 at 15.21.36.jpeg",
+      "WhatsApp Image 2026-08-19 at 15.21.37 (1).jpeg",
+       "WhatsApp Image 2026-08-19 at 15.21.37 (2).jpeg",
+      "WhatsApp Image 2026-08-19 at 15.21.37 (3).jpeg"
     ]
   },
   {
     "id": 2,
-    "title": "Kia K7",
-    "price": "28 000 ₼",
-    "year": "2017",
-    "engine": "2.4 L",
-    "mileage": "68 000 km",
-    "city": "Kredit",
+    "title": "",
+    "price": "22 000 ₼",
+    "year": "2015",
+    "engine": "-",
+    "mileage": "-",
+    "city": "-",
     "photos": [
-      "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800",
-      "https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=800"
+      "WhatsApp Image 2026-08-19 at 15.21.36.jpeg",
+      "WhatsApp Image 2026-08-19 at 14.47.02 (1).jpeg",
+      "WhatsApp Image 2026-08-19 at 14.47.03.jpeg",
+      "WhatsApp Image 2026-08-19 at 14.47.02 (2).jpeg"
     ]
   },
 
