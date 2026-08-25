@@ -7,7 +7,7 @@
     "year": "2006",
     "engine": "3",
     "mileage": "Benzin",
-    "city": "Kredit",
+    "city": "Nagd",
     "photos": [
       "cars/WhatsApp Image 2026-08-19 at 15.21.36.jpeg",
       "cars/WhatsApp Image 2026-08-19 at 15.21.37 (1).jpeg",
@@ -22,12 +22,87 @@
     "year": "2015",
     "engine": "-",
     "mileage": "-",
-    "city": "Kredit",
+    "city": "Nagd",
     "photos": [
       "cars/WhatsApp Image 2026-08-19 at 14.47.02.jpeg",
       "cars/WhatsApp Image 2026-08-19 at 14.47.02 (1).jpeg",
       "cars/WhatsApp Image 2026-08-19 at 14.47.03.jpeg",
       "cars/WhatsApp Image 2026-08-19 at 14.47.02 (2).jpeg"
+    ]
+  },
+    {
+    "id": 3,
+    "title": "Range Rover Velar",
+    "price": "53 900 ₼",
+    "year": "2019",
+    "engine": "2.0",
+    "mileage": "196000 km",
+    "city": "Benzin, Deri salon, full komplektasiya, istilik ve kondisioner islek veziyyetde",
+    "photos": [
+      "cars/range1.jpeg",
+      "cars/range2.jpeg",
+       "cars/range3.jpeg",
+      "cars/range4.jpeg"
+    ]
+  },
+   {
+    "id": 4,
+    "title": "Chevrolet Captiva",
+    "price": "5500(ilkin);16 ay 600₼",
+    "year": "2008",
+    "engine": "2.0",
+    "mileage": "Dizel, Avtomat, Deri salon, istilik ve kondisioner islek veziyyetde",
+    "city": "Kredit",
+    "photos": [
+      "cars/chev1.jpeg",
+      "cars/chev2.jpeg",
+       "cars/chev3.jpeg",
+      "cars/chev4.jpeg"
+    ]
+  },
+   {
+    "id": 5,
+    "title": "Mersedes c class",
+    "price": "5800",
+    "year": "1994",
+    "engine": "2.0",
+    "mileage": "Avtomat,",
+    "city": "Nagd",
+    "photos": [
+      "cars/merse.jpeg",
+      "cars/merse2.jpeg",
+       "cars/merse3.jpeg",
+      "cars/merse4.jpeg"
+    ]
+  },
+     {
+    "id": 6,
+    "title": "Mersedes e class",
+    "price": "11500",
+    "year": "2000",
+    "engine": "2.4",
+    "mileage": "Tam ideal veziyyetde, butun funksiyalar islek",
+    "city": "Nagd",
+    "photos": [
+      "cars/mersc1.jpeg",
+      "cars/mersc2.jpeg",
+       "cars/mersc3.jpeg",
+      "cars/mersc4.jpeg"
+    ]
+  },
+       {
+    "id": 7,
+    "title": "Land Rover Discovery",
+    "price": "11500",
+    "year": "2006",
+    "engine": "2.7",
+    "mileage": "Dizel, istilik ve kondisioner islek veziyyetde",
+    "city": "Nagd",
+    "photos": [
+      "cars/land1.jpeg",
+      "cars/land2.jpeg",
+       "cars/land3.jpeg",
+      "cars/land4.jpeg"
     ]
   }
 ]
