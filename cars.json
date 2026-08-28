@@ -63,7 +63,7 @@
    {
     "id": 5,
     "title": "Mersedes c class",
-    "price": "5800",
+    "price": "5800 ₼",
     "year": "1994",
     "engine": "2.0",
     "mileage": "Avtomat,",
@@ -78,7 +78,7 @@
      {
     "id": 6,
     "title": "Mersedes e class",
-    "price": "11500",
+    "price": "11500 ₼",
     "year": "2000",
     "engine": "2.4",
     "mileage": "Tam ideal veziyyetde, butun funksiyalar islek",
@@ -90,10 +90,11 @@
       "cars/mersc4.jpeg"
     ]
   },
-       {
+  
+  {
     "id": 7,
     "title": "Land Rover Discovery",
-    "price": "11500",
+    "price": "11500 ₼",
     "year": "2006",
     "engine": "2.7",
     "mileage": "Dizel, istilik ve kondisioner islek veziyyetde",
@@ -103,6 +104,66 @@
       "cars/land2.jpeg",
        "cars/land3.jpeg",
       "cars/land4.jpeg"
+    ]
+  },
+     
+  {
+    "id": 8,
+    "title": "Hundai ix 35",
+    "price": "8000 Azn ilkin odenis, 25 ay 798 Azn",
+    "year": "2014",
+    "engine": "2.0",
+    "mileage": "Ideal veziyyetde, seliqeli salon, butun funksiyalar islekdir",
+    "city": "Kredit",
+    "photos": [
+      "hund1.jpeg",
+      "hund2.jpeg",
+       "hund3.jpeg"
+    ]
+  },
+       
+  {
+    "id": 9,
+    "title": "Nissan Sunny (Latio)",
+    "price": "9500 ₼",
+    "year": "2014",
+    "engine": "1.2, Benzin",
+    "mileage": "Kondisioner islek veziyyetde, android monitor",
+    "city": "Nagd",
+    "photos": [
+      "niss1.jpeg",
+      "niss2.jpeg",
+       "niss3.jpeg"
+    ]
+  },
+       
+  {
+    "id": 10,
+    "title": "-",
+    "price": "Nagd qiymet 16500, salon kredit mümkündür ilködəniş 6000 manat sahibinə çatan + salon",
+    "year": "2010",
+    "engine": "3.5, benzin",
+    "mileage": "Deri salon, android monitor, tekerler yeni, 7 yerlik",
+    "city": "Nagd",
+    "photos": [
+      "santafe1.jpeg",
+      "santafe2.jpeg",
+       "santafe3.jpeg"
+    ]
+  },
+  
+    {
+    "id": 11,
+    "title": "-",
+    "price": "3500 azn+400(ofis haqqi)",
+    "year": "1991",
+    "engine": "2 avtomat",
+    "mileage": "-",
+    "city": "Nagd",
+    "photos": [
+      "1901.jpeg",
+      "1902.jpeg",
+       "1903.jpeg"
     ]
   }
 ]
