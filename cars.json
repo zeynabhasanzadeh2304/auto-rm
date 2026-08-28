@@ -140,11 +140,11 @@
   {
     "id": 10,
     "title": "-",
-    "price": "Nagd qiymet 16500, salon kredit mümkündür ilködəniş 6000 manat sahibinə çatan + salon",
+    "price": "Nagd qiymet 16500, salon kredit mümkündür ilködəniş 6000 manat + ofis haqqi",
     "year": "2010",
     "engine": "3.5, benzin",
     "mileage": "Deri salon, android monitor, tekerler yeni, 7 yerlik",
-    "city": "Nagd",
+    "city": "Kredit",
     "photos": [
       "santafe1.jpeg",
       "santafe2.jpeg",
@@ -155,7 +155,7 @@
     {
     "id": 11,
     "title": "-",
-    "price": "3500 azn+400(ofis haqqi)",
+    "price": "3500 azn+400",
     "year": "1991",
     "engine": "2 avtomat",
     "mileage": "-",
