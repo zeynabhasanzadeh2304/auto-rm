@@ -165,5 +165,47 @@
       "1902.jpeg",
        "1903.jpeg"
     ]
+  },
+    {
+    "id": 12,
+    "title": "Ford Fusion",
+    "price": "12300 azn sahibi+500 ofis; Kredit 3800(ilkin odenis)",
+    "year": "2013",
+    "engine": "1.6",
+    "mileage": "Kondisioner islek, motor yeni yigilib, senedler qaydasinda",
+    "city": "Kredit",
+    "photos": [
+      "cars/ford1.jpeg",
+      "cars/ford2.jpeg"
+    ]
+  },
+  {
+    "id": 13,
+    "title": "-",
+    "price": "kredit ilkin odenis 5500 31ay 890 azn",
+    "year": "2016",
+    "engine": "195 min km",
+    "mileage": "-",
+    "city": "Kredit",
+    "photos": [
+      "cars/bmw1.jpeg",
+      "cars/bmw2.jpeg",
+      "cars/bmw3.jpeg",
+      "cars/bmw4.jpeg"
+    ]
+  },
+    {
+    "id": 14,
+    "title": "BMW 46",
+    "price": "6500 Azn",
+    "year": "2001",
+    "engine": "2.2",
+    "mileage": "-",
+    "city": "Nagd",
+    "photos": [
+      "cars/bmwf.jpeg",
+      "cars/bmwf2.jpeg",
+      "cars/bmwf3.jpeg"
+    ]
   }
 ]
