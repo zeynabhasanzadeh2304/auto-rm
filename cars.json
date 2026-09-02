@@ -175,8 +175,8 @@
     "mileage": "Kondisioner islek, motor yeni yigilib, senedler qaydasinda",
     "city": "Kredit",
     "photos": [
-      "cars/ford1.jpeg",
-      "cars/ford2.jpeg"
+      "ford1.jpeg",
+      "ford2.jpeg"
     ]
   },
   {
@@ -188,10 +188,10 @@
     "mileage": "-",
     "city": "Kredit",
     "photos": [
-      "cars/bmw1.jpeg",
-      "cars/bmw2.jpeg",
-      "cars/bmw3.jpeg",
-      "cars/bmw4.jpeg"
+      "bmw1.jpeg",
+      "bmw2.jpeg",
+      "bmw3.jpeg",
+      "bmw4.jpeg"
     ]
   },
     {
@@ -203,9 +203,9 @@
     "mileage": "-",
     "city": "Nagd",
     "photos": [
-      "cars/bmwf.jpeg",
-      "cars/bmwf2.jpeg",
-      "cars/bmwf3.jpeg"
+      "bmwf.jpeg",
+      "bmwf2.jpeg",
+      "bmwf3.jpeg"
     ]
   }
 ]
