@@ -47,8 +47,8 @@
   },
    {
     "id": 4,
-    "title": "Chevrolet Captiva",
-    "price": "5500(ilkin);16 ay 600₼",
+    "title": "5500(ilkin);16 ay 600₼",
+    "price": "Chevrolet Captiva",
     "year": "2008",
     "engine": "2.0",
     "mileage": "Dizel, Avtomat, Deri salon, istilik ve kondisioner islek veziyyetde",
@@ -139,8 +139,8 @@
        
   {
     "id": 10,
-    "title": "-",
-    "price": "Nagd qiymet 16500, salon kredit mümkündür ilködəniş 6000 manat + ofis haqqi",
+    "title": "Nagd qiymet 16500, salon kredit mümkündür ilködəniş 6000 manat + ofis haqqi",
+    "price": "Hyundai Santafe",
     "year": "2010",
     "engine": "3.5, benzin",
     "mileage": "Deri salon, android monitor, tekerler yeni, 7 yerlik",
@@ -168,8 +168,8 @@
   },
     {
     "id": 12,
-    "title": "Ford Fusion",
-    "price": "12300 azn sahibi+500 ofis; Kredit 3800(ilkin odenis)",
+    "title": "12300 azn sahibi+500 ofis; Kredit 3800(ilkin odenis)",
+    "price": "Ford Fusion",
     "year": "2013",
     "engine": "1.6",
     "mileage": "Kondisioner islek, motor yeni yigilib, senedler qaydasinda",
@@ -181,8 +181,8 @@
   },
   {
     "id": 13,
-    "title": "-",
-    "price": "kredit ilkin odenis 5500 31ay 890 azn",
+    "title": "Kredit ilkin odenis 5500 31ay 890 azn",
+    "price": "-",
     "year": "2016",
     "engine": "195 min km",
     "mileage": "-",
